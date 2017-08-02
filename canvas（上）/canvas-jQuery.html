@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>canvas-jQuery</title>
+    <style type="text/css">
+      body{
+      	background-color: #000;
+      }
+      #drawing{
+      	background-color: #fff;
+      }
+      #img1{
+            background-color: #fff;
+      }
+    </style> 
+    <script type="text/javascript" src="jCanvaScript.1.5.18.min.js"></script>
+	</head>
+	<body>
+		<canvas id="drawing" width="400" height="400"></canvas>
+    <input type="button" id="input1" value="点击" />
+            
+		<script type="text/javascript">
+      window.onload = function(){
+      	var drawing = document.getElementById("drawing");
+      	var context = drawing.getContext('2d');
+        var oInput = document.getElementById('input1');
+
+        jc.start('drawing',true);    // 第二个参数代表重绘的意思
+
+        // jc.rect(100,100,50,50,'#ff0000',1);    // 1——true:填充，0——false：边框
+        // jc.rect(100,100,50,50,true);
+        // 添加点击事件
+        // jc.circle(100,100,50,'#ff0000',1).click(function(){
+        //   alert(123);
+        // });
+        // 拖拽
+        // jc.circle(100,100,50,'#ff0000',1).draggable();
+        jc.circle(100,100,50,'#ff0000',1).id('p1');
+      
+
+        jc.start('drawing');
+
+        oInput.onclick = function(){
+          jc('#p1').color('#ffff00').animate({x:200,y:200,radius:100},2000);
+
+        };
+
+            
+      };
+		</script>
+	</body>
+</html>

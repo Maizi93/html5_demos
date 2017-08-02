@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8" />
+		<title>微博图片旋转功能</title>
+		<style type="text/css">
+            *{
+            	margin: 0px;
+            	padding: 0px;
+            }
+            body{
+            	background-color: #000;
+            }
+		</style>
+	</head>
+
+	<body>
+	    <input type="button" value="←" />
+	    <input type="button" value="→" />
+	    <div>
+	    	<img src="2.png" id="img1" />
+	    </div>
+
+		<script type="text/javascript">
+		    window.onload = function(){
+                var oInput = document.getElementsByTagName('input');
+                var oImg = document.getElementById('img1');
+                var iNow = 0;
+
+                // 创建Image对象
+                var yImg = new Image();
+                yImg.onload = function(){
+               	    draw(oImg);
+                };
+                yImg.src = oImg.src;
+
+                function draw(obj){
+                	var drawing = document.createElement('canvas');
+                	var context = drawing.getContext('2d');
+
+                	drawing.width = obj.width;
+                	drawing.height = obj.height;
+
+                	obj.parentNode.replaceChild(drawing,obj);
+
+                	context.drawImage(obj,0,0);
+
+                	// 给向左的箭头添加点击事件
+                	oInput[0].onclick = function(){
+                		if(iNow == 0){
+                			iNow = 3;
+                		}else{
+                			iNow --;
+                		}
+                		toChange();
+                	};
+                    
+                    // 给向右的箭头添加点击事件
+                	oInput[1].onclick = function(){
+                		if(iNow == 3){
+                			iNow = 0;
+                		}else{
+                			iNow ++;
+                		}
+                		toChange();
+                	};
+
+
+
+                	function toChange(){
+                		switch(iNow){
+                            case 0:
+                			    drawing.width = obj.width;
+                			    drawing.height = obj.height;
+                			    context.drawImage(obj,0,0);
+                			break;
+
+                			case 1:
+                			    drawing.width = obj.height;
+                			    drawing.height = obj.width;
+                			    context.rotate(90*Math.PI/180);
+                			    context.drawImage(obj,0,-obj.height);
+                			break;
+
+                			case 2:
+                			    drawing.width = obj.width;
+                			    drawing.height = obj.height;
+                			    context.rotate(180*Math.PI/180);
+                			    context.drawImage(obj,-obj.width,-obj.height);
+                			break;
+
+                			case 3:
+                			    drawing.width = obj.height;
+                			    drawing.height = obj.width;
+                			    context.rotate(270*Math.PI/180);
+                			    context.drawImage(obj,-obj.width,0);
+                			break;
+
+                		}
+                	};
+                };
+
+            };
+		</script>
+	</body>
+</html>

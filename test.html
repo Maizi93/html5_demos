@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>练习</title>
+    <script src="json2.js"></script>
+    
+</head>
+
+<body>
+    <input type="button" value="随机选择" id="input1">
+    <div id="div1"></div>
+    
+    <script>
+        window.onload=function(){
+            var oInput = document.getElementById('input1');
+            var oDiv = document.getElementById('div1');
+            var json = {};
+
+            oInput.onclick = function(){
+                var num = Math.random();            // 产生一个随机数作为hash值
+                var arr = randomNumber(35,7);       // 产生一个随机数组
+                json[num] = arr;
+                oDiv.innerHTML = arr;
+                window.location.hash = num;
+            };
+
+            //当触发onhashchange事件后，获取当前的hash值，并根据hash值找到对应的json值，然后赋给oDiv作为显示内容
+            window.onhashchange = function(){
+                oDiv.innerHTML = json[window.location.hash.substring(1)];
+            };
+
+            function randomNumber(iAll,iNow){
+                var arr = [];
+                var newArr = [];
+                for(var i = 1; i < iAll; i ++){
+                    arr.push(i);
+                }
+
+                for(var i = 0; i < iNow; i ++){
+                    var temp = Math.floor(Math.random()*arr.length);
+                    newArr.push(arr[temp]);
+
+                }
+
+                return newArr;
+
+
+            }
+        };
+    </script>
+</body>
+
+</html>

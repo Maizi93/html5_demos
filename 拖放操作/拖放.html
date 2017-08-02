@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8">
+		<title>拖放操作</title>
+		<style type="text/css">
+		    *{
+		    	margin: 0;
+		    	padding: 0;
+		    }
+            li{
+            	list-style: none;
+            	width: 100px;
+            	height: 30px;
+            	background-color: yellow;
+            	margin: 10px;
+            }
+            #div1{
+            	width: 100px;
+            	height: 100px;
+            	background-color: red;
+            	margin: 200px;
+            }
+		</style>
+	</head>
+
+	<body>
+		<ul>
+			<li draggable = "true">a</li>
+			<li draggable = "true">b</li>
+			<li draggable = "true">c</li>
+		</ul>
+		<div id="div1"></div>
+
+		<script type="text/javascript">
+            window.onload = function(){
+            	// 获取被拖放的元素
+            	var aLi = document.getElementsByTagName('li');
+            	// 获取拖放目标元素
+            	var oDiv = document.getElementById('div1');
+            	var count = 0;
+
+            	// 给被拖放的元素添加事件
+            	for(var i = 0; i < aLi.length; i ++){
+            		// 拖拽前触发（拖拽的一瞬间触发）
+            		aLi[i].ondragstart = function(){
+            			this.style.background = "blue";
+            		};
+            		// 拖拽前、拖拽结束之间，连续触发
+            		// aLi[i].ondrag = function(){
+            		// 	document.title = count ++;
+            		// };
+            		// 拖拽结束触发
+            		aLi[i].ondragend = function(){
+            			this.style.background = "yellow";
+            		};
+            	}
+
+            	// 给拖放目标元素添加事件
+            	// 进入目标元素触发，相当于mouseover
+            	oDiv.ondragenter = function(){
+            		this.style.background = "yellow";
+            	};
+            	// 进入目标、离开目标之间，连续触发
+            	oDiv.ondragover = function(event){
+            		event = event || window.event;
+            		// document.title = count ++;
+            		// 想要触发drop事件，就必须要在dragover中阻止默认事件
+            		event.preventDefault();
+            	};
+            	// 离开目标元素触发，相当于mouseout
+            	oDiv.ondragleave = function(){
+            		this.style.background = "red";
+            	};
+            	// 在目标元素上释放鼠标触发
+            	oDiv.ondrop = function(){
+            		alert(123);
+            	};
+            };
+		</script>
+	</body>
+</html>

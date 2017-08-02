@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8" />
+		<title>鼠标画线</title>
+		<style type="text/css">
+            *{
+            	margin: 0px;
+            	padding: 0px;
+            }
+            body{
+            	background-color: blue;
+            }
+            #c1{
+            	background-color: #fff;
+            }
+            span{
+            	color: #fff;
+            }
+		</style>
+	</head>
+
+	<body>
+	    <!-- 默认：width=300px; height=150px; -->
+		<canvas id="c1" width="400" height="400">
+			<span>该浏览器不支持canvas</span>
+		</canvas>
+
+		<script type="text/javascript">
+		    window.onload = function(){
+                    // 获取元素
+                    var drawing = document.getElementById('c1');
+                    // 获取绘图上下文
+                    var context = drawing.getContext('2d');
+
+                    // 给画布添加鼠标按下事件
+                    drawing.onmousedown = function(event){
+                    	var event = event || wiondow.event;
+
+                    	context.moveTo(event.clientX-drawing.offsetLeft,event.clientY-drawing.offsetTop);
+                        
+                        // 添加鼠标移动事件
+                    	document.onmousemove = function(event){
+                    		var event = event || wiondow.event;
+                    		context.lineTo(event.clientX-drawing.offsetLeft,event.clientY-drawing.offsetTop);
+                    		context.stroke();
+                    	};
+
+                    	// 添加鼠标抬起事件
+                    	document.onmouseup = function(){
+                    		// 取消鼠标移动事件
+                    		document.onmousemove = null;
+                    		document.onmouseup = null;
+                    	};
+                    	
+                    };
+                };
+
+		</script>
+	</body>
+</html>

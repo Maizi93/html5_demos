@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8">
+		<title>dataTransfer对象——拖拽外部文件</title>
+		<style type="text/css">
+	     *{
+	    	    margin: 0;
+	    	    padding: 0;
+	      }    
+            #div1{
+            	width: 200px;
+            	height: 200px;
+            	background-color: red;
+            	margin: 100px;
+                  color: #fff;
+                  line-height: 200px;
+                  text-align: center;
+            }
+		</style>
+	</head>
+
+	<body>
+		<div id="div1">将文件拖拽到此区域</div>
+           
+		<script type="text/javascript">
+            window.onload = function(){
+            	// 获取拖放目标元素
+            	var oDiv = document.getElementById('div1');
+            	
+
+            	oDiv.ondragenter = function(){
+            		this.innerHTML = "可以释放鼠标啦~";
+            	};
+
+            	oDiv.ondragover = function(event){
+            		// 想要触发drop事件，就必须要在dragover中阻止默认事件
+            		event.preventDefault();
+            	};
+
+            	oDiv.ondragleave = function(){
+            		this.innerHTML = "将文件拖拽到此区域";
+            	};
+
+            	oDiv.ondrop = function(event){
+                        this.innerHTML = "将文件拖拽到此区域";
+                        event.preventDefault();
+
+                        var fs = event.dataTransfer.files;
+                        // alert("您添加的文件的格式为：" + fs[0].type);
+                        // alert("你已经成功添加" + fs.length + "个文件!");
+
+                        var fd = new FileReader();    // 创建文件对象
+                        fd.readAsDataURL(fs[0]);      // 将文件读取为DataURL
+                        fd.onload = function(){       // 当文件读取成功时，触发此事件
+                              alert(this.result);
+                        };
+                        
+
+                        
+            	};
+            };
+		</script>
+	</body>
+</html>

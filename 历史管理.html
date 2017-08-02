@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>历史管理</title>  
+</head>
+
+<body>
+    <input type="button" value="随机选择" id="input1">
+    <div id="div1"></div>
+    
+    <script>
+        window.onload=function(){
+            var oInput = document.getElementById('input1');
+            var oDiv = document.getElementById('div1');
+
+            oInput.onclick = function(){
+                // 随机产生一个数组(包含7个元素)
+                var arr = randomNumber(35,7);
+                // 存入数据(三个参数：① 数据；② 标题(没实现)；③ 地址)
+                history.pushState(arr,'',Math.random());
+                // 让产生的数组在div中显示
+                oDiv.innerHTML = arr;
+            };
+
+            // 读取数据
+            window.onpopstate = function(event){
+                oDiv.innerHTML = event.state;
+            };
+            
+
+            function randomNumber(iAll,iNow){
+                var arr = [];
+                var newArr = [];
+                for(var i = 1; i < iAll; i ++){
+                    arr.push(i);
+                }
+
+                for(var i = 0; i < iNow; i ++){
+                    var temp = Math.floor(Math.random()*arr.length);
+                    newArr.push(arr[temp]);
+
+                }
+
+                return newArr;
+
+
+            }
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8" />
+		<title>通过坐标来获取像素</title>
+		<style type="text/css">
+            *{
+            	margin: 0px;
+            	padding: 0px;
+            }
+            body{
+            	background-color: #000;
+            }
+            #c1{
+            	background-color: #fff;
+            }
+            span{
+            	color: #fff;
+            }
+		</style>
+	</head>
+
+	<body>
+	    <!-- 默认：width=300px; height=150px; -->
+		<canvas id="c1" width="400" height="400">
+			<span>该浏览器不支持canvas</span>
+		</canvas>
+
+		<script type="text/javascript">
+		    window.onload = function(){
+                var drawing = document.getElementById('c1');
+                var context = drawing.getContext('2d');
+
+                context.fillRect(0,0,100,100);
+
+                // 获取所有像素
+                var oImg = context.getImageData(0,0,100,100);
+                // alert(getXY(oImg,3,5));
+                // setXY(oImg,3,5,[255,0,0,255]);
+                for(var i = 0; i < oImg.width; i ++){
+                	setXY(oImg,i,5,[255,0,0,255]);
+                }
+                context.putImageData(oImg,100,100);
+
+                function setXY(obj,x,y,color){
+                	var w = obj.width;
+                	var h = obj.height;
+                	var d = obj.data;
+
+                	d[4*(w*y+x)] = color[0];
+                	d[4*(w*y+x)+1] = color[1];
+                	d[4*(w*y+x)+2] = color[2];
+                	d[4*(w*y+x)+3] = color[3];
+
+                }
+
+                function getXY(obj,x,y){
+                	var w = obj.width;
+                	var h = obj.height;
+                	var d = obj.data;
+
+                	var color = [];
+                	color[0] = d[4*(w*y+x)];
+                	color[1] = d[4*(w*y+x)+1];
+                	color[2] = d[4*(w*y+x)+2];
+                	color[3] = d[4*(w*y+x)+3];
+                	return color;
+                }
+
+            };
+		</script>
+	</body>
+</html>

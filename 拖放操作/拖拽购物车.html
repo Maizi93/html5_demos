@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8">
+		<title>拖拽购物车</title>
+            <style type="text/css">
+                *{
+                  margin: 0;
+                  padding: 0;
+                }
+                ul{
+                  width: 850px;
+                  margin: 50px auto;
+                  padding-left: 10px;
+                  padding-top: 10px;
+/*                  background: red;*/
+                }
+                li{
+                  list-style: none;
+                  float: left;
+                  width: 200px;
+                  height: 320px;
+                  margin: 0 10px 10px 0;
+/*                  border: 1px solid #000;*/
+                }
+                img{
+                  width: 150px;
+                  height: 220px;
+                  margin: 20px 25px;
+                }
+                p{
+                  font-size: 14px;
+                  line-height: 20px;
+                  text-align: center;
+                }
+                .clearfloat:after{
+                     display: block;
+                     visibility: hidden;
+                     content: "";
+                     height: 0;
+                     clear: both;
+                }
+                .clearfloat{
+                     zoom: 1;
+                }
+                #shopping{
+                  width: 600px;
+                  height: 400px;
+                  border: 2px solid red;
+                  margin: 0 auto;
+                  position: relative;
+                }
+                .shopping-item{
+                  border-bottom: 1px dashed #000;
+                }
+                .order,.goods,.price{
+                  float: left;
+                  width: 200px;
+                  height: 30px;
+                  line-height: 30px;
+                }
+                /*#payBox{
+                  position: absolute;
+                  right: 0px; 
+                }
+                #payBox span{
+                  padding-left: 10px;
+                  float: left;
+                  height: 40px;
+                  line-height: 40px;
+                }*/
+            </style>
+		
+	</head>
+
+	<body>
+            <ul class = "clearfloat">
+                  <li draggable="true">
+                        <img src="img1.jpg" />
+                        <p>JavaScript语言精粹</p>
+                        <p>￥24.30</p>
+                  </li>
+                  <li draggable="true">
+                        <img src="img2.jpg" />
+                        <p>JavaScript权威指南</p>
+                        <p>￥113.80</p>
+                  </li>
+                  <li draggable="true">
+                        <img src="img3.jpg" />
+                        <p>精通JavaScript</p>
+                        <p>￥37.70</p>
+                  </li>
+                  <li draggable="true">
+                        <img src="img4.jpg" />
+                        <p>JavaScript DOM编程艺术</p>
+                        <p>￥40.70</p>
+                  </li>
+            </ul>
+            
+            <div id="shopping">
+                  <!-- <p class = "clearfloat shopping-item" >
+                        <span class="order">1</span>
+                        <span class="goods">JavaScript DOM编程艺术</span>
+                        <span class="price">￥40.70</span>
+                  </p>
+                  <p class = "clearfloat shopping-item">
+                        <span class="order">1</span>
+                        <span class="goods">JavaScript DOM编程艺术</span>
+                        <span class="price">￥40.70</span>
+                  </p> -->
+                  <!-- <div id="payBox">
+                        <p class = "clearfloat">
+                            <span>合计：</span>
+                            <span class="allMoney">￥ 0</span>
+                            <span><input type="button" id="pay" value="结算(0)" /></span>
+                        </p>     
+                  </div> -->
+            </div>
+           
+		<script type="text/javascript">
+            window.onload = function(){
+                var aLi = document.getElementsByTagName('li');
+                var oDiv = document.getElementById('shopping');
+
+                // 循环给每个li添加拖拽事件
+                for(var i = 0; i < aLi.length; i ++){
+                  ali[i].ondragstart = function(event){
+                        var event = event || window.event;
+                        var aP = this.getElementsByTagName('p');
+                        // 设置数据
+                        event.dataTransfer.setData('title',ap[0].innerHTML);
+                        event.dataTransfer.setData('money',ap[1].innerHTML);
+                        event.dataTransfer.setDragImage(this,0,0);
+                  };
+                }
+                
+                
+                // 给目标元素添加拖拽事件
+                oDiv.ondragover = function(event){
+                  var event = event || window.event;
+                  // 想要触发drop事件，就必须要在dragover中阻止默认事件
+                  event.preventDefault();
+                };
+                oDiv.ondrop = function(event){
+                  var event = event || window.event;
+                  // 阻止默认打开
+                  event.preventDefault();
+                  var sTitle = event.dataTransfer.getData('title');
+                  var sMoney = event.dataTransfer.getData('money');
+                  // 动态创建结构
+                  var oP = document.createElement('p');
+                  oP.className = "clearfloat";
+                  var oSpan = document.createElement('span');
+                  oSpan.className = "order";
+                  oSpan.innerHTML = 1;
+                  oP.appendChild(oSpan);
+                  var oSpan = document.createElement('span');
+                  oSpan.className = "goods";
+                  oSpan.innerHTML = sTitle;
+                  oP.appendChild(oSpan);
+                  var oSpan = document.createElement('span');
+                  oSpan.className = "price";
+                  oSpan.innerHTML = sMoney;
+                  oP.appendChild(oSpan);
+                  oDiv.appendChild(oP);
+
+                };
+            };
+		</script>
+	</body>
+</html>

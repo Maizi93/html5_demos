@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8" />
+		<title>绘制路径</title>
+		<style type="text/css">
+		body{
+			background-color: blue;
+		}
+        #c1{
+        	background-color: #fff;
+        }
+        span{
+        	color: #fff;
+        }
+		</style>
+	</head>
+	<body>
+		<canvas id="c1" width="400" height="400">
+			<span>该浏览器不支持canvas</span>
+		</canvas>
+
+		<script type="text/javascript">
+            window.onload = function(){
+            	var drawing = document.getElementById('c1');
+	            var context = drawing.getContext('2d');
+
+	            // 开始绘制路径
+	            context.beginPath();
+
+	            context.lineWidth = 10;
+
+	            context.lineCap = "square";
+	            
+                context.moveTo(100,100);
+                context.lineTo(200,100);
+
+	            // 描边路径
+	            context.stroke();
+	            context.clearRect(0,0,drawing.width,drawing.height);
+            };
+		</script>
+	</body>
+</html>

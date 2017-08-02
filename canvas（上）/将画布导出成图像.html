@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>将画布导出成图像</title>
+	    <style type="text/css">
+            body{
+            	background-color: #000;
+            }
+            #drawing{
+            	background-color: #fff;
+            }
+            #img1{
+                  background-color: #fff;
+            }
+	    </style>
+	</head>
+	<body>
+		<canvas id="drawing" width="400" height="400"></canvas>
+            <img id="img1" src="" />
+
+
+		<script type="text/javascript">
+            window.onload = function(){
+            	var drawing = document.getElementById("drawing");
+            	var context = drawing.getContext('2d');
+
+                  var oImg = document.getElementById('img1');
+
+
+            	// 创建一个方块
+            	context.fillRect(0,0,100,100);
+
+            	context.fillStyle = "red";
+
+                  context.globalCompositeOperation = "xor";
+
+            	context.fillRect(50,50,100,100);
+
+                  // alert(drawing.toDataURL());
+                  oImg.src = drawing.toDataURL();
+
+            };
+		</script>
+	</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8" />
+		<title>绘制圆——钟表</title>
+		<style type="text/css">
+            *{
+            	margin: 0px;
+            	padding: 0px;
+            }
+            body{
+            	background-color: #000;
+            }
+            #c1{
+            	background-color: #fff;
+            }
+            span{
+            	color: #fff;
+            }
+		</style>
+	</head>
+
+	<body>
+	    <!-- 默认：width=300px; height=150px; -->
+		<canvas id="c1" width="400" height="400">
+			<span>该浏览器不支持canvas</span>
+		</canvas>
+
+		<script type="text/javascript">
+		    window.onload = function(){
+                var drawing = document.getElementById('c1');
+                var context = drawing.getContext('2d');
+
+                function toDrawClock(){
+                    var x = 200;
+                    var y = 200;
+                    var r = 150;
+
+                    // 在移动之前，先把画布清空
+                    context.clearRect(0,0,drawing.width,drawing.height);
+
+                    // 获取本地时间
+                    var oDate = new Date();
+                    var oHour = oDate.getHours();
+                    var oMin = oDate.getMinutes();
+                    var oSec = oDate.getSeconds();
+
+                    // 计算时针、分针、秒针对应的弧度
+                    var oHourArc = (oHour+oMin/60+oSec/3600)/12*2*Math.PI-1/2*Math.PI;
+                    var oMinArc = (oMin+oSec/60)/60*2*Math.PI-1/2*Math.PI;
+                    var oSecArc = oSec/60*2*Math.PI-1/2*Math.PI;
+                    
+
+                    // 画表盘
+                    context.beginPath();
+                    for(var i = 0; i < 60; i ++){
+                        context.moveTo(x,y);
+                        context.arc(x,y,r,6*i*Math.PI/180,6*(i+1)*Math.PI/180,false);
+                    }
+                    context.closePath();
+                    context.stroke();
+
+                    context.fillStyle = "#fff";
+                    context.beginPath();
+                    context.moveTo(x,y);
+                    context.arc(x,y,r-5,0,2*Math.PI,false);
+                    context.fill();
+                    context.closePath();
+
+
+                    context.lineWidth = 3;
+                    context.beginPath();
+                    for(var i = 0; i < 12; i ++){
+                        context.moveTo(x,y);
+                        context.arc(x,y,r,30*i*Math.PI/180,30*(i+1)*Math.PI/180,false);
+                    }
+                    context.closePath();
+                    context.stroke();
+
+                    context.fillStyle = "#fff";
+                    context.beginPath();
+                    context.moveTo(x,y);
+                    context.arc(x,y,r-10,0,2*Math.PI,false);
+                    context.fill();
+                    context.closePath();
+
+                    // 添加表盘上的数字
+                    context.fillStyle = "#000";
+                    context.font = "14px impact";
+                    context.textAlign = "center";
+                    context.textBaseline = "middle";
+                    context.fillText('12',200,70);
+                    context.fillText('3',330,200);
+                    context.fillText('6',200,330);
+                    context.fillText('9',70,200);
+                    context.fillText('1',264,88);
+                    context.fillText('2',312,136);
+                    context.fillText('4',312,268);
+                    context.fillText('5',264,312);
+                    context.fillText('7',136,312);
+                    context.fillText('8',88,268);
+                    context.fillText('10',88,136);
+                    context.fillText('11',136,88);
+
+
+                    // 绘制时针、分针和秒针
+                    // 时针
+                    context.lineWidth = 5;
+                    context.beginPath();
+                    context.moveTo(x,y);
+                    context.arc(x,y,r-60,oHourArc,oHourArc,false);
+                    context.closePath();
+                    context.stroke();   
+
+                    // 分针
+                    context.lineWidth = 3;
+                    context.beginPath();
+                    context.moveTo(x,y);
+                    context.arc(x,y,r-30,oMinArc,oMinArc,false);
+                    context.closePath();
+                    context.stroke();   
+
+                    // 秒针
+                    context.lineWidth = 1;
+                    context.beginPath();
+                    context.moveTo(x,y);
+                    context.arc(x,y,r-12,oSecArc,oSecArc,false);
+                    context.closePath();
+                    context.stroke();                  
+                };
+
+                setInterval(function(){
+                    toDrawClock();
+                },1000);
+            };
+		</script>
+	</body>
+</html>

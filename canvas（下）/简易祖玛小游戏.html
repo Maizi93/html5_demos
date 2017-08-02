@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>简易祖玛小游戏</title>
+		<style type="text/css">
+            *{
+            	margin: 0;
+            	padding: 0;
+            }
+            body{
+            	background-color: #000;
+            }
+            #div1{
+            	width: 600px;
+            	margin: 20px auto;
+            	background-color: #fff;
+            }
+
+		</style>
+
+	</head>
+	<body>
+		<div id="div1">
+			<canvas id="drawing" width="600" height="600"></canvas>
+		</div>
+
+		<script type="text/javascript">
+            window.onload = function(){
+                var drawing = document.getElementById('drawing');
+                var context = drawing.getContext('2d');
+                var i = 0;
+
+                var yImg = new Image();
+                yImg.src = "person.png";
+                yImg.onload = function(){
+
+                	setInterval(function(){
+	                    // 每次先清画布
+	                    context.clearRect(0,0,drawing.width,drawing.height);
+
+	                	context.beginPath();
+			            context.arc(300,200,200,-90*Math.PI/180,180*Math.PI/180,false);
+			            context.stroke();
+
+			            context.beginPath();
+			            context.arc(250,200,150,-180*Math.PI/180,0,false);
+			            context.stroke();
+
+			            context.beginPath();
+			            context.arc(300,200,100,0,180*Math.PI/180,false);
+			            context.stroke();
+
+			            context.beginPath();
+			            context.arc(250,200,50,-180*Math.PI/180,-90*Math.PI/180,false);
+			            context.stroke();
+
+			            context.beginPath();
+			            context.arc(300,200,20,0,2*Math.PI,false);
+			            context.stroke();
+
+	                    for(var i = 0; i < ball.length; i ++){
+	                    	// context.save();
+	                    	context.beginPath();
+	                    	context.moveTo(ball[i].x,ball[i].y);
+	                    	context.fillStyle = ball[i].color;
+				            context.arc(ball[i].x,ball[i].y,20,0,2*Math.PI,false);
+				            context.fill();
+				            // context.restore();
+	                    }
+
+                        context.save();
+                        context.translate(300,200);
+                        context.rotate(iRotate);
+                        context.translate(-yImg.width/2,-yImg.height/2);
+	                    context.drawImage(yImg,0,0);
+	                    context.restore();
+
+
+	                    for(var i = 0; i < bullet.length; i ++){
+	                    	context.save();
+	                    	context.fillStyle = bullet[i].color;
+	                    	context.beginPath();
+	                    	context.moveTo(bullet[i].x,bullet[i].y);
+	                    	context.arc(bullet[i].x,bullet[i].y,20,0,2*Math.PI,false);
+	                    	context.fill();
+	                        context.restore();
+	                    }
+	                  
+	                    
+
+	                    // 添加文字
+	                    context.save();
+	                    context.font = "60px impact";
+	                    context.textBaseline = "top";
+	                    context.fillStyle = "red";
+	                    context.shadowOffsetX = 10;
+	                    context.shadowOffsetY = 10;
+	                    context.shadowColor = "green";
+	                    context.shadowBlur = 5;
+	                    var w = context.measureText('简易祖玛').width;
+	                    var h = 60;
+	                    context.fillText('简易祖玛',(drawing.width-w)/2,450)
+	                    context.restore();
+
+                        
+			            
+	                },1000/60);
+
+	                setInterval(function(){
+	                	for(var i = 0; i < ball.length; i ++){
+		                	ball[i].num ++;
+		                	if(ball[i].num == 270){
+		                		ball[i].r = 150;
+		                		ball[i].startX = 250;
+		                		ball[i].startY = 50;
+		                	}else if(ball[i].num == 450){
+		                		ball[i].r = 100;
+		                		ball[i].startX = 300;
+		                		ball[i].startY = 100;
+		                	}else if(ball[i].num == 630){
+		                		ball[i].r = 50;
+		                		ball[i].startX = 250;
+		                		ball[i].startY = 150;
+		                	}else if(ball[i].num == 630 + 90){
+		                		alert('Game over!');
+		                		// 刷新页面
+		                		window.location.reload();
+		                	}
+
+
+		                	ball[i].x = ball[i].startX + Math.sin(ball[i].num * Math.PI/180) * ball[i].r;
+		                	ball[i].y = ball[i].r - Math.cos(ball[i].num * Math.PI/180) * ball[i].r + ball[i].startY;
+		                }
+
+		                for(var i = 0; i < bullet.length; i ++){
+		                	bullet[i].x = bullet[i].x + bullet[i].sX;
+		                	bullet[i].y = bullet[i].y + bullet[i].sY;
+		                }
+
+		                for(var i = 0; i < bullet.length; i ++){
+		                	for(var j = 0; j < ball.length; j ++){
+		                		if(pz(ball[j].x,ball[j].y,bullet[i].x,bullet[i].y,ball[j].color,bullet[i].color)){
+		                			// 如果两个小球碰上了，就分别从小球和子弹数组中删除这两个小球
+		                			bullet.splice(i,1);
+		                			ball.splice(j,1);
+		                			break;
+		                		}else{
+		                			// 否则，将子弹小球添加到小球队列当中
+		                		}
+		                	}
+		                }
+
+
+	                },30);
+
+					var ball = [];	           
+		            setInterval(function(){
+		            	ball.push({
+		            		x: 300,
+			            	y: 0,
+			            	r: 200,
+			            	num: 0,
+			            	startX: 300,
+			            	startY: 0,
+			            	color: getRandomColor()
+		            	});
+		            },500);
+
+		            var iRotate = 0;
+		            drawing.onmousemove = function(event){
+		            	var event = event || wiondow.event;
+
+		            	var x = event.clientX - drawing.offsetLeft;
+		            	var y = event.clientY - drawing.offsetTop;
+
+		            	var a = x - 300;
+		            	var b = y - 200;
+		            	var c = Math.sqrt(a*a+b*b);
+
+		            	if(a>0 && b>0){
+                            iRotate = Math.PI - Math.asin(a/c);
+		            	}else if(a>0){
+		            		iRotate = Math.asin(a/c);
+		            	}else if(a<0 && b<0){
+		            		iRotate = Math.asin(a/c); 
+		            	}else if(a<0){
+		            		iRotate = Math.PI - Math.asin(a/c);
+		            	}
+		            };
+
+		            var bullet = [];
+		            
+		            drawing.onmousedown = function(event){
+		            	var event = event || wiondow.event;
+
+		            	var x = event.clientX - drawing.offsetLeft;
+		            	var y = event.clientY - drawing.offsetTop;
+
+		            	var a = x - 300;
+		            	var b = y - 200;
+		            	var c = Math.sqrt(a*a+b*b);
+
+		            	var speed = 10;
+                        
+                        //根据速度分别求出x轴和y轴的速度
+		            	var sX = speed * a / c;   
+		            	var sY = speed * b / c;
+
+		            	bullet.push({
+		            		x: 300,
+		            		y: 200,
+		            		sX: sX,
+		            		sY: sY,
+		            		color: getRandomColor()
+		            	});
+		            };
+
+                };
+                
+
+                // 碰撞函数
+                function pz(x1,y1,x2,y2,color1,color2){
+                	var a = x1 - x2;
+                	var b = y1 - y2;
+
+                	var c = Math.sqrt(a*a + b*b);
+
+                	if(c<40 && color1 == color2){
+                		// 两个小球碰上了
+                		return true;
+                	}else{
+                		// 两个小球没碰上
+                		return false;
+                	}
+                }
+                
+
+                // 随机产生一种颜色
+                function getRandomColor(){
+                	var colors = ["red", "blue", "green", "yellow", "purple", "black"];
+                	var iNow = Math.floor(Math.random()*colors.length);
+                	return colors[iNow];
+                }
+                
+            };
+		</script>
+	</body>
+</html>

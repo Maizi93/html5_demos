@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>历史管理——随机选彩票</title>
+    <script src="json2.js"></script>
+    
+</head>
+
+<body>
+    <input type="button" value="随机选择" id="input1">
+    <div id="div1"></div>
+    <script type="text/javascript">
+        window.onload = function(){
+            var oInput = document.getElementById('input1');
+            var oDiv = document.getElementById('div1');
+            var json = {};
+
+            oInput.onclick = function(){
+                var num = Math.random();    // 产生一个随机数
+                var arr = randomNum(35,7);  // 随机产生一组7个数的数组
+                json[num] = arr;
+                oDiv.innerHTML = arr;  
+                window.location.hash = num;     
+            };
+
+
+            window.onhashchange = function(){
+                // 根据hash值获取对应的数组，并显示在div中
+                oDiv.innerHTML = json[window.location.hash.substring(1)];
+            };
+
+
+
+            function randomNum(iAll,iNow){
+                var arr = [];
+                var newArr = [];
+                // 35个数
+                for(var i = 1; i <= iAll; i++){
+                    arr.push(i);
+                }
+                // 选出7个不同的数
+                for(var i = 0; i < iNow; i ++){
+                    newArr.push(arr.splice(Math.floor(Math.random()*arr.length),1));
+                }
+                return newArr;
+
+            }
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8" />
+		<title>像素显字</title>
+		<style type="text/css">
+
+            body{
+            	background-color: #000;
+            	color: #fff;
+            	font-size: 30px;
+            }
+            #c1{
+            	background-color: #fff;
+            }
+            span{
+            	color: #fff;
+            }
+		</style>
+	</head>
+
+	<body>
+	    <!-- 默认：width=300px; height=150px; -->
+		<canvas id="c1" width="400" height="400">
+			<span>该浏览器不支持canvas</span>
+		</canvas>
+        <ul style="float:left">
+        	<li>妙</li>
+        	<li>味</li>
+        	<li>课</li>
+        	<li>堂</li>
+        </ul>
+		
+		<script type="text/javascript">
+		    window.onload = function(){
+                var drawing = document.getElementById('c1');
+                var context = drawing.getContext('2d');
+                var aLi = document.getElementsByTagName('li');
+
+                for(var i = 0; i < aLi.length; i ++){
+                	aLi[i].onclick = function(){
+                		
+                		var str = this.innerHTML;
+                		var h = 180;
+
+                		var timer = null;
+                		clearInterval(timer);
+
+                		var iNow = 0;
+
+                		context.clearRect(0,0,drawing.width,drawing.height);
+
+                		context.font = h + 'px impact';
+                		context.fillStyle = 'red';
+                		context.textBaseline = 'top';
+                		var w = context.measureText(str).width;
+                		context.fillText(str,(drawing.width-w)/2,(drawing.height-h)/2);
+
+                		var oImg = context.getImageData((drawing.width-w)/2,(drawing.height-h)/2,w,h);
+                		context.clearRect(0,0,drawing.width,drawing.height);
+
+                		var arr = randomArr(w*h,w*h/10);
+                		// 生成新的像素矩阵
+                		var newImg = context.createImageData(w,h);
+                        
+                        timer = setInterval(function(){
+                        	for(var i = 0; i < arr[iNow].length ; i ++){
+	                			newImg.data[4*arr[iNow][i]] = oImg.data[4*arr[iNow][i]];
+	                			newImg.data[4*arr[iNow][i]+1] = oImg.data[4*arr[i]+1];
+	                			newImg.data[4*arr[iNow][i]+2] = oImg.data[4*arr[iNow][i]+2];
+	                			newImg.data[4*arr[iNow][i]+3] = oImg.data[4*arr[iNow][i]+3];
+	                		}
+
+                		    context.putImageData(newImg,(drawing.width-w)/2,(drawing.height-h)/2);
+
+                		    if(iNow == 9){
+                		    	iNow =0;
+                		    	clearInterval(timer);
+                		    }else{
+                		    	iNow ++;
+                		    }
+
+                        },200);
+
+                		
+                	};
+                }
+
+                function randomArr(iAll,iNum){
+                	var arr = [];
+                	var allArr = [];
+                	for(var i =0; i < iAll; i ++){
+                		arr.push(i);
+                	}
+                	for(var j = 0; j < iAll/iNum; j ++){
+                		var newArr = [];
+                		for(var i = 0; i < iNum; i ++){
+	                		newArr.push(arr.splice(Math.floor(Math.random()*arr.length),1));
+	                	}
+	                	allArr.push(newArr);
+                	}
+                	
+                	return allArr;
+                };
+                
+            };
+		</script>
+	</body>
+</html>
